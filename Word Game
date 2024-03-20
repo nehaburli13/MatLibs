@@ -1,0 +1,29 @@
+# take story and place inside text file
+# angle brackets --> words needed to be replaced
+# r = read mode; w = write mode (writing over the file)
+with open("story", "r") as f: # open function allows you to open any file; r mode allows you to read the file
+    story = f.read() # file reads contents of f and assigns it to the variable "story"; "story" is a string
+
+words = set() # set contains one instance of each unique element
+start_of_word = -1 # finding starting index of a word; ensures no placeholder word is being processed
+target_start = "<"
+target_end = ">"
+
+for i, char in enumerate(story): # enumerate iterates through characters but also tracks the index of each character
+    if char == target_start:
+        start_of_word = i
+
+    if char == target_end and start_of_word != -1:
+        word = story[start_of_word: i + 1] # slicing the string to include the last word
+        words.add(word) # adding word to words list
+        start_of_word = -1 # need to reset start_of_word to find the new character bracket
+
+answers = {} # the word is the key and the value is the answer given
+for word in words:
+    answer = input("Enter a word for " + word) # using input statement, so needs to concatenate
+    answers[word] = answer # assigns a value, answer, to the key, word, in the answers dictionary
+
+for word in words:
+    story = story.replace(word, answers[word]) # replaces each placeholder "word" with the value associated with that word in the answers dictionary
+
+print(story)
